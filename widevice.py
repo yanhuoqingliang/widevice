@@ -36,8 +36,10 @@ def get_device_list(platform):
 
 def install_app(device, file, platform):
     if platform == 'ios':
+        print(f'tidevice -u {device} install {file}')
         os.system(f'tidevice -u {device} install {file}')
     elif platform == 'android':
+        print(f'adb -s {device} install {file}')
         os.system(f'adb -s {device} install {file}')
     else:
         print(f'暂不支持 {platform} 平台设备安装')
@@ -46,23 +48,23 @@ def install_app(device, file, platform):
 def batch_install():
     if current_thread().name == 'ios':
         ios_files = get_file_list(os.getcwd(), '.ipa')
-        print(ios_files)
+        print(f'IOS包：{ios_files}')
         ios_devices = get_device_list('ios')
         names = []
         for key in ios_devices.keys():
             names.append(ios_devices[key])
-        print(names)
+        print(f'IOS设备：{names}')
         for ios_file in ios_files:
             for key in ios_devices.keys():
                 install_app(device=key, file=ios_file, platform='ios')
     elif current_thread().name == 'android':
         android_files = get_file_list(os.getcwd(), '.apk')
-        print(android_files)
+        print(f'安卓包：{android_files}')
         android_devices = get_device_list('android')
         names = []
         for key in android_devices.keys():
             names.append(android_devices[key])
-        print(names)
+        print(f'Android设备：{names}')
         for android_file in android_files:
             for key in android_devices.keys():
                 install_app(device=key, file=android_file, platform='android')
